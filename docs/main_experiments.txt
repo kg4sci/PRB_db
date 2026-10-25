@@ -8,8 +8,7 @@ that previously imported it. Prompt builders, parsing, retry policies and
 input adapters are preserved. Model, credential and filesystem defaults,
 CLI configuration validation, and status messages are prepared for release.
 The original workspace code and the two pre-existing public inference files
-have not been changed. Source hashes and function-equivalence checks are in
-configs/main_experiment_sources.json. Each entry has model-separated default
+have not been changed. Each entry has model-separated default
 output paths; explicitly choosing --output for each run is still recommended.
 
 Run all commands from the repository root. Install requirements.txt first.
@@ -108,14 +107,12 @@ Main, ablation and send90hint entries remain single-stage: candidates are
 included in the same request, with a prompt instruction to decide triage first.
 This packaging does not introduce a two-stage experiment or change historical
 results. All current source paths use temperature 0. Schema-repair retries
-and token limits differ by implementation; consult the source inventory and
-audit instead of assuming a shared retry policy across providers.
+and token limits differ by implementation; consult the selected entry-point
+source instead of assuming a shared retry policy across providers.
 
-configs/paper_experiments.json is a descriptive index of the 42 archived runs,
-not an executable configuration or a guarantee that historical endpoint
-versions and environment overrides can be recovered. The launcher uses the
-model and endpoint you explicitly configure. The existing historical audit
-docs/experiment_code_audit.txt records the pre-packaging repository state.
+Historical endpoint versions and environment overrides are not fully
+recoverable. The launcher uses the model and endpoint you explicitly configure.
+
 Direct entry points, as well as the launcher, reject missing credentials,
 model identifiers or base URLs before starting inference. --help works
 without credentials and does not make API requests.

@@ -267,7 +267,7 @@ python scripts/run_experiment.py \
 
 Remove `--dry-run` to execute the first example. The launcher selects the matching dataset automatically; `--dataset` overrides it. Frozen degradation entries correctly substitute `degraded_abstract_text`, and both stress tests omit transfer ranking. Use the corresponding stress-test JSON for evaluation; Task 3 is not applicable to those sets.
 
-See the [complete experiment guide](docs/main_experiments.txt) for commands and output conventions. All 22 entry points are self-contained; Claude entries do not require a separate common module. The [source manifest](configs/main_experiment_sources.json) records their origins and hashes. Prompts, input adapters, and inference/retry behavior are preserved; configuration validation, default paths, and status messages are adapted for release. The [42-run audit index](configs/paper_experiments.json) describes archived results; it is not a configuration automatically consumed by the launcher.
+See the [complete experiment guide](docs/main_experiments.txt) for commands and output conventions. All 22 entry points are self-contained; Claude entries do not require a separate common module. Prompts, input adapters, and inference/retry behavior are preserved from the experimental implementations; configuration validation, default paths, and status messages are adapted for release.
 
 ## Evaluation
 
@@ -294,8 +294,7 @@ PreReviewBench/
 │   └── experiments/        # OpenAI-compatible and Anthropic experiment entries
 ├── evaluation/             # Metrics and diagnostic plots
 ├── scripts/                # Unified experiment launcher
-├── configs/                # Experiment audit and source provenance
-├── docs/                   # Experiment guide and audit notes
+├── docs/                   # Experiment guide and Hugging Face dataset card
 ├── tests/                  # Offline input, output, and resume checks
 ├── requirements.txt
 └── README.md
