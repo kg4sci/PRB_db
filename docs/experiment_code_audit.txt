@@ -1,0 +1,97 @@
+PreReviewBench 实验代码核对与发布整理
+核对日期：2026-10-25
+
+范围
+本次不修改任何已有 Python 代码、数据、实验结果或论文。
+核对当前论文 final-project、LLM_code/inference/Final、LLM_code/evaluate、
+GitHub 工作目录与 output/0520 下的最终结果。Final 是当前工作目录命名，
+并不单独证明某文件就是历史运行时的精确版本；结果与当前兼容入口分开记录。
+未调用模型 API，未重跑推理，未提交或推送 Git。
+
+1. 推理流程
+当前 Final 主实验仍是 single-stage：system prompt 和 user prompt 在一次
+请求中送入模型，user prompt 同时包含候选期刊；“先判断再看候选”由提示词要求。
+OpenAI-compatible 主入口：
+  LLM_code/inference/Final/inference_single_stage.py
+  LLM_code/inference/Final/inference_single_stage_CoT.py
+Anthropic-compatible 主入口及依赖：
+  LLM_code/inference/Final/Anthropic/inference_single_stage.py
+  LLM_code/inference/Final/Anthropic/inference_single_stage_CoT.py
+  LLM_code/inference/Final/Anthropic/anthropic_inference_common.py
+这些入口与论文中“在看到候选列表之前完成分诊”的严格信息隔离并不等价。
+Old/inference_two_stage.py 是历史实现，不应仅凭文件名作为本论文结果入口发布。
+GitHub Direct 与 Final Direct 的 system/user prompt 函数 AST 一致；
+API 调用核心一致，异常日志存在差异。
+
+2. 退化摘要：纠正先前仅检查 GitHub 时的推断
+Final 已有 frozen synthetic-degradation 专用入口，包含 _build_prompt_paper，
+会用 degraded_abstract_text 覆盖传给模型的 abstract_text。
+已对 OpenAI-compatible / Anthropic-compatible 的 Direct / CoT 四个适配函数
+分别进行离线检查，每个函数均正确选取全部 1,823 条退化摘要。
+八份退化实验结果携带的 degraded_abstract_text 也均与公开集的 1,823 条摘要一致。
+因此问题是这些专用入口尚未收进 GitHub，而不是已证明论文实验输入错误。
+结果记录未保存完整请求载荷，摘要一致本身不构成每次历史 API 请求的完整证明。
+冻结扰动集评测入口与 experiment_synthetic_degradation.py 的重新生成流程应分开整理。
+
+3. 42 份结果的实例校验
+主实验 8 + no_metrics 8 + only_name 8 + keyword_noised 8
+  + synthetic_degradation 8 + GPT send90hint 2 = 42。
+合计 218,760 条结果。各运行均按对应数据集的 uid/data_type/subject/target
+复合键核对：缺失 0、未知实例 0、重复 0。
+使用 GitHub 当前评测器离线重算八组主实验，Accuracy、Macro-F1、Q-F1、
+R-F1、Joint、MRR、NDCG@5 共 56 个数值，全部与论文三位小数结果一致。
+证据保存在 output/code_release_audit/main_metrics_check.json。
+部分主实验/消融/先验结果保留旧标签 Lack of Novelty/Impact；仅将该标签
+规范化为 Insufficient Novelty/Impact 后，所有结果的 ground_truth 均匹配。
+逐运行覆盖、错误数、原始及规范化标签差异见 configs/paper_experiments.json。
+
+4. 错误记录与重试策略
+42 份结果共保留 339 条 Error/非字典响应记录，不能把“覆盖完整”写成
+“全部输出有效”。主实验包括 Claude 39/41、DeepSeek 3/2、Qwen 4/26 条
+错误记录（依次为 Direct/Rationale-first），GPT 主实验两组均为 0。
+原始结果应保留；历史复现不应静默剔除错误记录或重试后覆盖论文结果。
+Final 的 Anthropic 与冻结扰动入口有 schema 校验和输出修复重试，基础
+OpenAI-compatible 主入口与 GitHub 主入口主要处理 API 重试，不能写成统一策略。
+当前源码默认：API 最多 3 次尝试；支持输出修复的入口默认最多 4 次输出尝试；
+Anthropic-compatible 默认 max_tokens=2048。这些默认值可由环境覆盖，
+缺少历史启动环境时，不能声称所有论文运行必然使用这些默认值。
+
+5. 配置及来源追踪
+configs/paper_experiments.json 是描述性实验索引，不是当前脚本能直接读取的配置。
+它记录 42 组条件、数据文件、实例数、结果相对路径、SHA-256、兼容源码入口。
+workspace 路径相对于 /home/chenming/pre-review；dataset 路径相对于 GitHub 仓库。
+历史启动命令、环境变量值和运行时源码提交未完整归档，不能从当前默认 MODEL
+或结果文件名反推出所有调用参数。配置中明确保留这项不确定性。
+不要发布凭据、私人服务配置或将当前默认模型当作历史模型身份的唯一证据。
+
+6. 需要收录的已有代码（本轮仅整理，不复制或改写）
+A. 最高优先级：Final 内 frozen keyword-noise / synthetic-degradation 的
+   Direct、CoT 入口，以及对应 Anthropic 版本。这些实现已经存在。
+B. 主实验 Claude：Anthropic 两个主入口及 anthropic_inference_common.py。
+C. 消融：no_journal_metrics 与 name_only 的 Direct、CoT 入口及 Anthropic 版本。
+D. 先验提示：inference_single_stage_send90hint.py 与 CoT 版本。
+   这与 evaluate_prior_shift.py 的固定预测后分层分析是不同实验。
+E. 结果合并：merge_final_inference_results.py；模型/条件专用的校验脚本应
+   先明确用途，避免将 archive 或旧修复产物当作最终结果。
+F. GitHub 工作树已有、尚未 Git 跟踪：baselines/、ExpertValidation、
+   TitleOnlyContamination、build_task3_soft_multigold.py、
+   evaluate_task3_soft_multigold.py、evaluate_prior_shift.py。
+详见 supplemental_code_inventory.csv，记录每个源码文件及哈希与跟踪状态。
+
+7. 论文补充实验的选择
+主表 baseline 应对应：
+  run_logreg_no_source_jcrq.py：5-fold GroupKFold，按论文 uid 分组，TF-IDF
+    在训练折内拟合，包含目标 JCR quartile，排除源期刊、SSI 与 transfer gold。
+  run_lexical_full_profile_baselines.py：Jaccard / BM25 使用完整期刊 profile。
+  run_embedding_profile_baseline.py：SciBERT FullProfile / mean pooling / 512；
+    SPECTER Scope / CLS pooling / 512。不要用 centroid-128 变体替代论文结果。
+补充依赖：scikit-learn（分类/词法基线），torch、transformers（向量基线）。
+现有 requirements.txt 未覆盖这些新增基线依赖，本轮未更改。
+专家验证数据中 annotation 与 label-review 文件用途不同，最终统计应对应
+论文的 200 个盲评样本，不应把多种中间文件简单拼接计算。
+
+8. 后续发布整理顺序
+先收录已存在的冻结扰动和 Anthropic 入口，再补齐消融/先验入口及其依赖；
+随后整理基线与补充评测，最后增加启动配置和数据/预测完整性校验。
+两阶段推理属于协议实现变更，不是为了“整理代码”而自动替换历史实验。
+本轮不执行任何上述实现变更，也不重新生成历史结果。

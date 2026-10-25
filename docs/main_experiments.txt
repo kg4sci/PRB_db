@@ -1,0 +1,121 @@
+Released main experiment entry points
+====================================
+
+The inference/experiments directory contains 22 self-contained entry points
+adapted from the current Final experiment implementations. There is no
+separate Claude common module: its runtime is embedded in the six entries
+that previously imported it. Prompt builders, parsing, retry policies and
+input adapters are preserved. Model, credential and filesystem defaults,
+CLI configuration validation, and status messages are prepared for release.
+The original workspace code and the two pre-existing public inference files
+have not been changed. Source hashes and function-equivalence checks are in
+configs/main_experiment_sources.json. Each entry has model-separated default
+output paths; explicitly choosing --output for each run is still recommended.
+
+Run all commands from the repository root. Install requirements.txt first.
+No additional Python packages are needed for these 22 inference entry points:
+the Anthropic-compatible implementation uses the Python standard-library HTTP
+client rather than requiring the Anthropic SDK.
+
+Experiment matrix
+-----------------
+condition                dataset                          paper configurations
+main                     benchmark2025.json               4 models x 2 prompts
+no_metrics               benchmark2025.json               4 models x 2 prompts
+name_only                benchmark2025.json               4 models x 2 prompts
+keyword_noise            benchmark2025_keyword_noise_mixed.json       4 x 2
+synthetic_degradation    benchmark2025_synthetic_degradation.json     4 x 2
+send90hint               benchmark2025.json               GPT only x 2 prompts
+
+These total 42 paper configurations. Choose direct or rationale_first for
+--prompt. The openai backend denotes an OpenAI-compatible API protocol, also
+used by compatible DeepSeek and Qwen endpoints. The anthropic backend denotes
+the /v1/messages protocol and includes main, both ablations and both stress
+tests; there is no paper Anthropic send90hint entry point.
+
+Configuration
+-------------
+export LLM_API_KEY="YOUR_API_KEY"
+export LLM_BASE_URL="YOUR_PROVIDER_BASE_URL"
+export LLM_MODEL_NAME="YOUR_PROVIDER_MODEL_ID"
+
+Alternatively use OPENAI_API_KEY / OPENAI_BASE_URL / OPENAI_MODEL for the
+openai backend, or ANTHROPIC_API_KEY / ANTHROPIC_BASE_URL / ANTHROPIC_MODEL
+for the anthropic backend. LLM_* takes precedence. For anthropic, supply the
+service root URL: the implementation appends /v1/messages. For openai, use
+the provider's OpenAI-compatible base URL, typically ending in /v1.
+
+Start with --dry-run; it only prints the command and does not contact an API:
+
+python scripts/run_experiment.py --condition main --prompt direct \
+  --backend openai --output outputs/gpt/main/direct.json --dry-run
+
+Then remove --dry-run and optionally add --num 5 for a small API smoke run.
+Actual inference uses the configured provider and can incur usage charges.
+
+Examples
+--------
+python scripts/run_experiment.py --condition main --prompt rationale_first \
+  --backend anthropic --output outputs/claude/main/rationale_first.json
+
+python scripts/run_experiment.py --condition no_metrics --prompt direct \
+  --backend openai --output outputs/gpt/no_metrics/direct.json
+
+python scripts/run_experiment.py --condition name_only --prompt rationale_first \
+  --backend openai --output outputs/qwen/name_only/rationale_first.json
+
+python scripts/run_experiment.py --condition keyword_noise --prompt direct \
+  --backend anthropic --output outputs/claude/keyword_noise/direct.json
+
+python scripts/run_experiment.py --condition synthetic_degradation --prompt direct \
+  --backend openai --output outputs/gpt/synthetic_degradation/direct.json
+
+python scripts/run_experiment.py --condition send90hint --prompt direct \
+  --backend openai --output outputs/gpt/send90hint/direct.json
+
+Set the appropriate model and provider before each example. Model labels in
+output paths are just organizational names; they do not select the model.
+Use --model to override LLM_MODEL_NAME explicitly. Use --dataset to override
+the default released input. The launcher also forwards --num-shards,
+--shard-id, --uid, --sample-id, and --finished-from.
+
+Frozen stress tests
+-------------------
+These entries evaluate the already released perturbations; they do not
+regenerate them. Synthetic-degradation inputs substitute degraded_abstract_text
+for the original abstract. Keyword-noise inputs use the existing modified
+keywords. Both stress-test entry points omit transfer ranking.
+
+Outputs and evaluation
+----------------------
+Use a distinct --output for every model, prompt and condition. Existing
+outputs are resumed using recorded instance IDs. The default actual prediction
+file is <output>.jsonl, e.g. outputs/gpt/main/direct.json.jsonl. Setting
+INFERENCE_WRITE_FINAL_JSON=1 additionally writes the JSON-array output.
+Sharded runs add a shard suffix; do not pass an individual shard as though it
+were the complete benchmark.
+
+python evaluation/evaluate_predictions.py \
+  --results outputs/gpt/main/direct.json.jsonl \
+  --benchmark dataset/benchmark2025.json --no-plots
+
+For stress tests, use the corresponding perturbation JSON as --benchmark.
+Their Task 3 metrics are not applicable because transfer options are absent.
+
+Preserved protocol and reproduction limits
+-----------------------------------------
+Main, ablation and send90hint entries remain single-stage: candidates are
+included in the same request, with a prompt instruction to decide triage first.
+This packaging does not introduce a two-stage experiment or change historical
+results. All current source paths use temperature 0. Schema-repair retries
+and token limits differ by implementation; consult the source inventory and
+audit instead of assuming a shared retry policy across providers.
+
+configs/paper_experiments.json is a descriptive index of the 42 archived runs,
+not an executable configuration or a guarantee that historical endpoint
+versions and environment overrides can be recovered. The launcher uses the
+model and endpoint you explicitly configure. The existing historical audit
+docs/experiment_code_audit.txt records the pre-packaging repository state.
+Direct entry points, as well as the launcher, reject missing credentials,
+model identifiers or base URLs before starting inference. --help works
+without credentials and does not make API requests.

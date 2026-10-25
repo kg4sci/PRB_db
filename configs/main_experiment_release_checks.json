@@ -1,0 +1,240 @@
+{
+  "scope": "Only the 22 new inference experiment entry points; not a full repository publication certification.",
+  "standalone_entrypoints": 22,
+  "common_module_present": false,
+  "static_checks": [
+    {
+      "entrypoint": "inference/experiments/openai/inference_single_stage.py",
+      "function_equivalence": true,
+      "private_defaults_removed": true
+    },
+    {
+      "entrypoint": "inference/experiments/openai/inference_single_stage_CoT.py",
+      "function_equivalence": true,
+      "private_defaults_removed": true
+    },
+    {
+      "entrypoint": "inference/experiments/openai/inference_single_stage_CoT_name_only.py",
+      "function_equivalence": true,
+      "private_defaults_removed": true
+    },
+    {
+      "entrypoint": "inference/experiments/openai/inference_single_stage_CoT_no_journal_metrics.py",
+      "function_equivalence": true,
+      "private_defaults_removed": true
+    },
+    {
+      "entrypoint": "inference/experiments/openai/inference_single_stage_CoT_real_submission_keyword_noise_mixed.py",
+      "function_equivalence": true,
+      "private_defaults_removed": true
+    },
+    {
+      "entrypoint": "inference/experiments/openai/inference_single_stage_CoT_real_submission_synthetic_degradation.py",
+      "function_equivalence": true,
+      "private_defaults_removed": true
+    },
+    {
+      "entrypoint": "inference/experiments/openai/inference_single_stage_CoT_send90hint.py",
+      "function_equivalence": true,
+      "private_defaults_removed": true
+    },
+    {
+      "entrypoint": "inference/experiments/openai/inference_single_stage_name_only.py",
+      "function_equivalence": true,
+      "private_defaults_removed": true
+    },
+    {
+      "entrypoint": "inference/experiments/openai/inference_single_stage_no_journal_metrics.py",
+      "function_equivalence": true,
+      "private_defaults_removed": true
+    },
+    {
+      "entrypoint": "inference/experiments/openai/inference_single_stage_real_submission_keyword_noise_mixed.py",
+      "function_equivalence": true,
+      "private_defaults_removed": true
+    },
+    {
+      "entrypoint": "inference/experiments/openai/inference_single_stage_real_submission_synthetic_degradation.py",
+      "function_equivalence": true,
+      "private_defaults_removed": true
+    },
+    {
+      "entrypoint": "inference/experiments/openai/inference_single_stage_send90hint.py",
+      "function_equivalence": true,
+      "private_defaults_removed": true
+    },
+    {
+      "entrypoint": "inference/experiments/anthropic/inference_single_stage.py",
+      "function_equivalence": true,
+      "private_defaults_removed": true
+    },
+    {
+      "entrypoint": "inference/experiments/anthropic/inference_single_stage_CoT.py",
+      "function_equivalence": true,
+      "private_defaults_removed": true
+    },
+    {
+      "entrypoint": "inference/experiments/anthropic/inference_single_stage_CoT_name_only.py",
+      "function_equivalence": true,
+      "private_defaults_removed": true
+    },
+    {
+      "entrypoint": "inference/experiments/anthropic/inference_single_stage_CoT_no_journal_metrics.py",
+      "function_equivalence": true,
+      "private_defaults_removed": true
+    },
+    {
+      "entrypoint": "inference/experiments/anthropic/inference_single_stage_CoT_real_submission_keyword_noise_mixed.py",
+      "function_equivalence": true,
+      "private_defaults_removed": true
+    },
+    {
+      "entrypoint": "inference/experiments/anthropic/inference_single_stage_CoT_real_submission_synthetic_degradation.py",
+      "function_equivalence": true,
+      "private_defaults_removed": true
+    },
+    {
+      "entrypoint": "inference/experiments/anthropic/inference_single_stage_name_only.py",
+      "function_equivalence": true,
+      "private_defaults_removed": true
+    },
+    {
+      "entrypoint": "inference/experiments/anthropic/inference_single_stage_no_journal_metrics.py",
+      "function_equivalence": true,
+      "private_defaults_removed": true
+    },
+    {
+      "entrypoint": "inference/experiments/anthropic/inference_single_stage_real_submission_keyword_noise_mixed.py",
+      "function_equivalence": true,
+      "private_defaults_removed": true
+    },
+    {
+      "entrypoint": "inference/experiments/anthropic/inference_single_stage_real_submission_synthetic_degradation.py",
+      "function_equivalence": true,
+      "private_defaults_removed": true
+    }
+  ],
+  "cli_checks": [
+    {
+      "entrypoint": "inference/experiments/anthropic/inference_single_stage.py",
+      "help_passed": true,
+      "missing_configuration_rejected": true
+    },
+    {
+      "entrypoint": "inference/experiments/anthropic/inference_single_stage_CoT.py",
+      "help_passed": true,
+      "missing_configuration_rejected": true
+    },
+    {
+      "entrypoint": "inference/experiments/anthropic/inference_single_stage_CoT_name_only.py",
+      "help_passed": true,
+      "missing_configuration_rejected": true
+    },
+    {
+      "entrypoint": "inference/experiments/anthropic/inference_single_stage_CoT_no_journal_metrics.py",
+      "help_passed": true,
+      "missing_configuration_rejected": true
+    },
+    {
+      "entrypoint": "inference/experiments/anthropic/inference_single_stage_CoT_real_submission_keyword_noise_mixed.py",
+      "help_passed": true,
+      "missing_configuration_rejected": true
+    },
+    {
+      "entrypoint": "inference/experiments/anthropic/inference_single_stage_CoT_real_submission_synthetic_degradation.py",
+      "help_passed": true,
+      "missing_configuration_rejected": true
+    },
+    {
+      "entrypoint": "inference/experiments/anthropic/inference_single_stage_name_only.py",
+      "help_passed": true,
+      "missing_configuration_rejected": true
+    },
+    {
+      "entrypoint": "inference/experiments/anthropic/inference_single_stage_no_journal_metrics.py",
+      "help_passed": true,
+      "missing_configuration_rejected": true
+    },
+    {
+      "entrypoint": "inference/experiments/anthropic/inference_single_stage_real_submission_keyword_noise_mixed.py",
+      "help_passed": true,
+      "missing_configuration_rejected": true
+    },
+    {
+      "entrypoint": "inference/experiments/anthropic/inference_single_stage_real_submission_synthetic_degradation.py",
+      "help_passed": true,
+      "missing_configuration_rejected": true
+    },
+    {
+      "entrypoint": "inference/experiments/openai/inference_single_stage.py",
+      "help_passed": true,
+      "missing_configuration_rejected": true
+    },
+    {
+      "entrypoint": "inference/experiments/openai/inference_single_stage_CoT.py",
+      "help_passed": true,
+      "missing_configuration_rejected": true
+    },
+    {
+      "entrypoint": "inference/experiments/openai/inference_single_stage_CoT_name_only.py",
+      "help_passed": true,
+      "missing_configuration_rejected": true
+    },
+    {
+      "entrypoint": "inference/experiments/openai/inference_single_stage_CoT_no_journal_metrics.py",
+      "help_passed": true,
+      "missing_configuration_rejected": true
+    },
+    {
+      "entrypoint": "inference/experiments/openai/inference_single_stage_CoT_real_submission_keyword_noise_mixed.py",
+      "help_passed": true,
+      "missing_configuration_rejected": true
+    },
+    {
+      "entrypoint": "inference/experiments/openai/inference_single_stage_CoT_real_submission_synthetic_degradation.py",
+      "help_passed": true,
+      "missing_configuration_rejected": true
+    },
+    {
+      "entrypoint": "inference/experiments/openai/inference_single_stage_CoT_send90hint.py",
+      "help_passed": true,
+      "missing_configuration_rejected": true
+    },
+    {
+      "entrypoint": "inference/experiments/openai/inference_single_stage_name_only.py",
+      "help_passed": true,
+      "missing_configuration_rejected": true
+    },
+    {
+      "entrypoint": "inference/experiments/openai/inference_single_stage_no_journal_metrics.py",
+      "help_passed": true,
+      "missing_configuration_rejected": true
+    },
+    {
+      "entrypoint": "inference/experiments/openai/inference_single_stage_real_submission_keyword_noise_mixed.py",
+      "help_passed": true,
+      "missing_configuration_rejected": true
+    },
+    {
+      "entrypoint": "inference/experiments/openai/inference_single_stage_real_submission_synthetic_degradation.py",
+      "help_passed": true,
+      "missing_configuration_rejected": true
+    },
+    {
+      "entrypoint": "inference/experiments/openai/inference_single_stage_send90hint.py",
+      "help_passed": true,
+      "missing_configuration_rejected": true
+    }
+  ],
+  "live_api_tested": false,
+  "offline_integration": {
+    "entrypoints": 22,
+    "network_blocked": true,
+    "checks": [
+      "correct manuscript/perturbation input",
+      "transfer candidate inclusion by condition",
+      "JSONL result persistence",
+      "completed-record resume"
+    ]
+  }
+}
