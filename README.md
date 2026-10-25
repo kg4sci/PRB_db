@@ -294,7 +294,7 @@ PreReviewBench/
 │   └── experiments/        # OpenAI-compatible and Anthropic experiment entries
 ├── evaluation/             # Metrics and diagnostic plots
 ├── scripts/                # Unified experiment launcher
-├── docs/                   # Experiment guide and Hugging Face dataset card
+├── docs/                   # Experiment guide
 ├── tests/                  # Offline input, output, and resume checks
 ├── requirements.txt
 └── README.md
